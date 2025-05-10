@@ -116,7 +116,7 @@ int s_connection_main(int argc, char **argv)
     char *www_path = NULL;
     char *host = SSL_CONNECT_NAME, *certfile = NULL, *keyfile = NULL, *prog;
     int noCApath = 0, noCAfile = 0, noCAstore = 0;
-    int nConn = 0, ret = 1, i, st_bugs = 0;
+    int ret = 1, i, st_bugs = 0;
     long bytes_read = 0;
     OPTION_CHOICE o;
     int min_version = 0, max_version = 0, buf_len;
@@ -269,7 +269,12 @@ int s_connection_main(int argc, char **argv)
     SSL_free(scon);
     scon = NULL;
 
-    printf("Handshake duration: %.2f ms\n", (endtime.tv_usec - starttime.tv_usec) / 1000.0);
+    double elapsed_ms = (endtime.tv_sec - starttime.tv_sec) * 1000.0 +
+                        (endtime.tv_usec - starttime.tv_usec) / 1000.0;
+
+    printf("Handshake duration: %.2f ms\n", elapsed_ms);
+    ret = 0;
+
 
  end:
     SSL_free(scon);
